@@ -1,0 +1,58 @@
+'use strict';
+const db = require('../../models');
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Quotes', {
+
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      Open: {
+        type: Sequelize.STRING
+      },
+      High: {
+        type: Sequelize.STRING
+      },
+      Low: {
+        type: Sequelize.STRING
+      },
+      Close: {
+        type: Sequelize.STRING
+      },
+      Volume: {
+        type: Sequelize.STRING
+      },
+      Interval: {
+        type: Sequelize.STRING,
+      },
+      DateTime: {
+        type: Sequelize.STRING
+      },
+
+      tickerid: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        references: {
+          model: 'Tickers',
+          key: 'ticker'
+        }
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
+    });
+  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('quotes');
+  }
+};
