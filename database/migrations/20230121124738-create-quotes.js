@@ -33,13 +33,20 @@ module.exports = {
       DateTime: {
         type: Sequelize.STRING
       },
-
       tickerid: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Tickers',
-          key: 'ticker'
+          key: 'id'
+        }
+      },
+      dataproid: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Dataproviders',
+          key: 'id'
         }
       },
       createdAt: {

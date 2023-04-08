@@ -2,7 +2,6 @@
 const {
   Model
 } = require('sequelize');
-  const Tickers = require('./ticker');
 module.exports = (sequelize, DataTypes) => {
   class Quotes extends Model {
     /**
@@ -14,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Quotes.belongsTo(models.Ticker,{
         foreignKey:'tickerid'
+      });
+      Quotes.belongsTo(models.Dataprovider,{
+        foreignKey:'dataproid'
       });
 
      
@@ -28,7 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     Close: DataTypes.STRING,
     Volume: DataTypes.STRING,
     Interval:DataTypes.STRING,
-    DateTime:DataTypes.STRING
+    DateTime:DataTypes.STRING,
+    // tickerid:DataTypes.STRING,
+    // dataproid:DataTypes.INTEGER
+    
 
   }, {
     sequelize,

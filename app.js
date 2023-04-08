@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const Route = require('./route/router');
 const app = express();
 require('dotenv').config();
+BigInt.prototype['toJSON'] = function () {
+    return parseInt(this.toString());
+};
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

@@ -1,5 +1,6 @@
 
-const { Ticker } = require('../models');
+const { Ticker,  Sequelize } = require('../models');
+const { Dataprovider } = require('../models');
 const apiController = require('./api-controller')
 
 module.exports = tickerController = {
@@ -17,26 +18,26 @@ module.exports = tickerController = {
   // },
   getAllTicker: async (req, res) => {
     const tickers = await Ticker.findAll({})
-    if(!tickers){
+    if (!tickers) {
       res.status(400).send({
         status: 'error',
-        message:'error in url'
+        message: 'No tickers found.'
       });
     }
     res.status(200).send(
       {
-        status: 'sucess',
-        data:tickers
+        status: 'success',
+        data: tickers
       }
     )
   },
 
   getOne: async (req, res) => {
-    try{
+    try {
       let id = req.params.id;
       const tickers = await Ticker.findOne({ where: { id: id } })
       // res.status(200).json(tickers);
-      if(!tickers){
+      if (!tickers) {
         res.status(400).send({
           status: 'error',
           'message': 'ticker not found'
@@ -45,11 +46,11 @@ module.exports = tickerController = {
       res.status(200).send(
         {
           status: 'sucess',
-          data:tickers
+          data: tickers
         }
       )
     }
-    catch(error){
+    catch (error) {
       res.send(error);
     }
   },
@@ -59,18 +60,19 @@ module.exports = tickerController = {
       const { ticker, fullname, description, assetclass } = req.body;
       const findTicker = await Ticker.findOne({ where: { id: id } })
       if (!findTicker) {
-        res.status(400).send({
-          status: 'error',
-          'message': 'ticker not found'
-        });
-        
+        // res.status(400).send({
+        //   status: 'error',
+        //   'message': 'ticker not found'
+        // });
+        res.send("error")
+
       }
-      
+
       const update = {
-        ticker:ticker?ticker:null,
-        fullname:fullname?fullname:null,
-        description:description?description:null,
-        assetclass:assetclass?assetclass:null
+        ticker: ticker ? ticker : null,
+        fullname: fullname ? fullname : null,
+        description: description ? description : null,
+        assetclass: assetclass ? assetclass : null
       };
 
       const updateTick = await findTicker.update(update);
@@ -92,22 +94,28 @@ module.exports = tickerController = {
       res.send(error)
     }
   },
-  nticker:  async (req, res)=>{
-    let symbol =req.params.symbol;
-    const  tickerData  =   await apiController.tickerApi(symbol);
-    if(tickerData){
-      const ntickers =  await  Ticker.create({
-        ticker: tickerData.Symbol,
-        fullname: tickerData.Name,
-        description: tickerData.Description,
-        assetclass: tickerData.AssetType,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }) 
-      res.status(200).json(ntickers);
+  nticker: async (req, res) => {
+    const symbol= req.params.symbol.toUpperCase();
+    const findTicker = await Ticker.findOne({
+      attributes: [ Sequelize.col('ticker')],
+      where: { ticker:symbol },
+      raw: true
+    })
+    if(findTicker){
+      return res.json(`${symbol} Already Exists!`)
     }
-    else{
-      res.status(404).send("error");
+    const tickerData = await apiController.tickerApi(symbol);
+    if(tickerData===false){
+      return res.json('Wrong URL! Plase Enter Correct URL')
     }
-      }
-  }
+    const tickers = await Ticker.create({
+      ticker: tickerData.Symbol,
+      fullname: tickerData.Name,
+      description: tickerData.Description,
+      assetclass: tickerData.AssetType,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    res.status(200).json(tickers);
+  },
+}

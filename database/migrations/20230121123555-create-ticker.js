@@ -13,7 +13,6 @@ module.exports = {
       },
       ticker: {
         type: Sequelize.STRING,
-        primaryKey:true,
         unique:true
       },
       fullname: {
