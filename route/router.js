@@ -13,48 +13,48 @@ const { Ticker } = require('../models');
 const dataproviderController = require('../controller/dataprovider-controller');
 
 
-const app = express();
+// const app = express();
 
-app.get('/ticker/findall', tickerController.getAllTicker);
-app.get('/ticker/:id', tickerController.getOne);
-app.put('/ticker/:id', tickerController.updateTicker);
-app.post('/ticker/:symbol', tickerController.nticker);
-
-
-module.exports = app;
-
-// module.exports = (app) => {
-//   app.get('/ticker/findall', tickerController.getAllTicker);
-//   app.get('/list', userController.index);
-//   app.get('/ticker/:id', tickerController.getOne);
-//   app.put('/ticker/:id', tickerController.updateTicker);
-//   //quotes route
-//   app.get('/quotes/:id', quotesCotntroller.insertQuotes);
-//   app.post('/quotes/:key/:symbol', quotesCotntroller.insertQuotes);
-
-//   //Ticekrs and Quotes Route
-//   //intrday
-//   app.get('/ticker/quotes/:id', tickerQuotesController.tickerQuotes);
-//   //daily, montly, weekly
+// app.get('/ticker/findall', tickerController.getAllTicker);
+// app.get('/ticker/:id', tickerController.getOne);
+// app.put('/ticker/:id', tickerController.updateTicker);
+// app.post('/ticker/:symbol', tickerController.nticker);
 
 
+// module.exports = app;
 
-//   //ticker's quote controller route
-//   //insert ticker router
-//   app.post('/ticker/:symbol', tickerController.nticker);
+module.exports = (app) => {
+  app.get('/ticker/findall', tickerController.getAllTicker);
+  app.get('/list', userController.index);
+  app.get('/ticker/:id', tickerController.getOne);
+  app.put('/ticker/:id', tickerController.updateTicker);
+  //quotes route
+  app.get('/quotes/:id', quotesCotntroller.insertQuotes);
+  app.post('/quotes/:key/:symbol', quotesCotntroller.insertQuotes);
 
-//   app.post('/intraday/:symbol/:interval', tickerQuotesController.insertTicekerQuotes);
-//   //daily montly weekly
-//   app.post('/quotesdata/:symbol/:interval', tickerQuotesController.dwmController);
-
-//   //get router
-//   app.get('/ticker/quotes/:symbol/:interval/:id', tickerQuotesController.tickerQuotes);
-//   app.get('/ticker/quotes/:symbol/:interval/:id/:startdate/:endate', tickerQuotesController.betweentickerQuotes);
+  //Ticekrs and Quotes Route
+  //intrday
+  app.get('/ticker/quotes/:id', tickerQuotesController.tickerQuotes);
+  //daily, montly, weekly
 
 
-//   //Search Company Symbol Router
 
-//   app.get('/search/:value', apiController.userAPI);
+  //ticker's quote controller routedb
+  //insert ticker router
+  app.post('/ticker/:symbol', tickerController.nticker);
 
-// };
+  app.post('/intraday/:symbol/:interval', tickerQuotesController.insertTicekerQuotes);
+  //daily montly weekly
+  app.post('/quotesdata/:symbol/:interval', tickerQuotesController.dwmController);
+
+  //get router
+  app.get('/ticker/quotes/:symbol/:interval/:id', tickerQuotesController.tickerQuotes);
+  app.get('/ticker/quotes/:symbol/:interval/:id/:startdate/:endate', tickerQuotesController.betweentickerQuotes);
+
+
+  //Search Company Symbol Router
+
+  app.get('/search/:value', apiController.userAPI);
+
+};
 

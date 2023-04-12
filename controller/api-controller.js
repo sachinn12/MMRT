@@ -58,7 +58,7 @@ module.exports = apiController = {
   dwmApi: async (symbol, interval) => {
     try {
       // return console.log(symbol, interval)
-      const result = await axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_${interval}&symbol=${symbol}&apikey=8BOWDBXH4MKMIX2K`);
+      const result = await axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_${interval}_ADJUSTED&symbol=${symbol}&apikey=8BOWDBXH4MKMIX2K`);
       const data = result.data;
       if (data) {
         return data
