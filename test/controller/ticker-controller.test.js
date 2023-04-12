@@ -6,6 +6,7 @@ const { Ticker, Quotes } = require('../../models');
 const tickerController = require('../../controller/ticker-controller');
 const { Op } = require("sequelize");
 const app = require('../../route/router.js')
+const request = require('supertest')(app);
 
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
@@ -68,7 +69,62 @@ describe('tickerController', () => {
     });
   });
 
-  //update ticker
+  
+  describe('nticker', () => {
+    it('should create a new ticker and return it',  async () => {
+      const tickerData = {
+        Symbol: 'AAPL',
+        Name: 'Apple Inc.',
+        Description: 'A technology company that sells consumer electronics, computer software, and online services',
+        AssetType: 'Equity'
+      };
+      const expectedTicker = {
+        id: 1,
+        ticker: 'AAPL',
+        fullname: 'Apple Inc.',
+        description: 'A technology company that sells consumer electronics, computer software, and online services',
+        assetclass: 'Equity'
+      };
+      request.post('/ticker/AAPL')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return err;
+          expect(res.body).to.deep.equal(expectedTicker);
+          // done();
+        });
+    });
+  
+    it('should return an error message if the ticker already exists',async  () => {
+      const tickerData = {
+        Symbol: 'AAPL',
+        Name: 'Apple Inc.',
+        Description: 'A technology company that sells consumer electronics, computer software, and online services',
+        AssetType: 'Equity'
+      };
+      request.post('/ticker/AAPL')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return err
+          request.post('/api/ticker/AAPL')
+            .expect(200)
+            .end((err, res) => {
+              if (err) return done(err);
+              expect(res.body).to.equal('AAPL Already Exists!');
+              // done();
+            });
+        });
+    });
+  
+    it('should return an error message if the ticker API URL is incorrect', async () => {
+      request.post('/api/ticker/INVALID')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return err;
+          expect(res.body).to.equal('Wrong URL! Please Enter Correct URL');
+          // done();
+        });
+    });
+  });
 
 
   

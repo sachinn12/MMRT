@@ -18,6 +18,7 @@ const app = express();
 app.get('/ticker/findall', tickerController.getAllTicker);
 app.get('/ticker/:id', tickerController.getOne);
 app.put('/ticker/:id', tickerController.updateTicker);
+app.post('/ticker/:symbol', tickerController.nticker);
 
 
 module.exports = app;
