@@ -6,7 +6,7 @@ const should = chai.should();
 const expect = chai.expect;
 chai.use(chaiHttp);
 describe('apiController', () => {
-
+ 
     describe('tickerApi', () => {
         it('should return a data object when passed a valid symbol', async () => {
             const result = await apiController.tickerApi('AAPL');
